@@ -1,13 +1,25 @@
 {
   "name": "mass-renamer",
   "displayName": "mass-renamer",
-  "description": "",
+  "description": "Batch rename files and folders with a simple right-click",
   "version": "0.0.1",
+  "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.92.0"
   },
+  "repository": {
+    "url": "https://github.com/evertjr/vxcode-theme.git"
+  },
   "categories": [
     "Other"
+  ],
+  "keywords": [
+    "mass-renamer",
+    "rename",
+    "bulk rename",
+    "mass",
+    "refactor",
+    "files"
   ],
   "activationEvents": [],
   "main": "./out/extension.js",

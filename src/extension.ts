@@ -6,7 +6,7 @@ import * as path from "path";
 import * as vscode from "vscode";
 
 export function activate(context: vscode.ExtensionContext) {
-  let disposable = vscode.commands.registerCommand(
+  const disposable = vscode.commands.registerCommand(
     "extension.massRename",
     (uri: vscode.Uri, uris: vscode.Uri[]) => {
       if (uris && uris.length > 0) {
@@ -39,7 +39,7 @@ async function massRename(uris: vscode.Uri[]) {
   const uniqueSuffix = crypto.randomBytes(4).toString("hex");
   const tempFile = await createTempFile(files, uniqueSuffix);
   const document = await vscode.workspace.openTextDocument(tempFile);
-  const editor = await vscode.window.showTextDocument(document);
+  await vscode.window.showTextDocument(document);
 
   let tempFileOpen = true;
   const projectRoot = getProjectRoot(files[0]);
@@ -101,15 +101,16 @@ async function massRename(uris: vscode.Uri[]) {
       const isTempFileOpen = editors.some(
         (e) => e.document.uri.fsPath === tempFile
       );
-      if (!isTempFileOpen && tempFileOpen) {
-        tempFileOpen = false;
-        watcher.dispose();
-        changeListener.dispose();
-        saveListener.dispose();
-        visibleEditorsListener.dispose();
-        await vscode.workspace.fs.delete(vscode.Uri.file(tempFile));
-        vscode.window.showInformationMessage("Mass rename completed.");
+      if (!(!isTempFileOpen && tempFileOpen)) {
+        return;
       }
+      tempFileOpen = false;
+      watcher.dispose();
+      changeListener.dispose();
+      saveListener.dispose();
+      visibleEditorsListener.dispose();
+      await vscode.workspace.fs.delete(vscode.Uri.file(tempFile));
+      vscode.window.showInformationMessage("Mass rename completed.");
     }
   );
 }

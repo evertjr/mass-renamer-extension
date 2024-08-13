@@ -1,16 +1,16 @@
 # Mass Renamer Extension for VSCode
 
-## A powerful and easy to use extension for batch renaming files in Visual Studio Code
+## A powerful and easy-to-use extension for batch renaming files in Visual Studio Code
 
 Mass Rename is an intuitive extension that allows you to rename multiple files and folders quickly and easily within your VSCode workspace.
 
 ## Features
 
 - Batch rename files and folders with a simple right-click
-- Edit file names in a familiar text editor interface
-- Preserves folder structure during renaming
+- Leverage the full power of the VSCode text editor to easily rename and move files
 - Can move files and create new folders during the operation
-- Since it's a text file, you can use AI to help you make complex changes
+- You can easily use LLMs to help you make complex changes
+- Automatically avoid files and folders in .gitignore
 
 ## How to Use
 
@@ -19,7 +19,14 @@ Mass Rename is an intuitive extension that allows you to rename multiple files a
 3. Edit the file names in the opened text document
 4. Save the document to apply changes, or close without saving to cancel
 
-![Mass Rename Demo](/images/mass-rename-demo.gif)
+### Rename and move multiple files and folders at once
+
+![Mass Rename Demo](/images/example-1.gif)
+
+### Use AI to instantly reorganize your folder structure
+
+![Mass Rename Demo](/images/example-2.gif)
+Note: AI is not included with the Mass Renamer extension. You can use any available AI extension such as Continue.dev or GitHub Copilot to assist with complex renaming tasks.
 
 ## Best Practices
 
@@ -29,7 +36,7 @@ Mass Rename is an intuitive extension that allows you to rename multiple files a
 
 ## Issues and Contribution
 
-- If you encounter any issues or have suggestions for improvements, please feel free to open an issue on our GitHub repository
+- If you encounter any issues or have suggestions for improvements, please feel free to open an issue on my GitHub repository
 - Contributions via pull requests are welcome!
 
 ## License
@@ -38,4 +45,4 @@ MIT
 
 ---
 
-Made with ❤️ by [evertjr](https://github.com/evertjr)
+Made with 💜 by [evertjr](https://github.com/evertjr)
