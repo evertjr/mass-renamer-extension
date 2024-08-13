@@ -1,14 +1,15 @@
 {
   "name": "mass-renamer",
-  "displayName": "mass-renamer",
+  "displayName": "Mass Renamer",
   "description": "Batch rename files and folders with a simple right-click",
   "version": "0.0.1",
+  "publisher": "evertjunior",
   "icon": "images/icon.png",
   "engines": {
     "vscode": "^1.92.0"
   },
   "repository": {
-    "url": "https://github.com/evertjr/vxcode-theme.git"
+    "url": "https://github.com/evertjr/mass-renamer-extension.git"
   },
   "categories": [
     "Other"
@@ -22,7 +23,7 @@
     "files"
   ],
   "activationEvents": [],
-  "main": "./out/extension.js",
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
@@ -41,10 +42,13 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "pnpm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "pnpm run compile && pnpm run lint",
+    "vscode:prepublish": "pnpm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
     "lint": "eslint src --ext ts",
     "test": "vscode-test"
   },
@@ -56,6 +60,9 @@
     "@typescript-eslint/parser": "^7.11.0",
     "@vscode/test-cli": "^0.0.9",
     "@vscode/test-electron": "^2.4.0",
+    "ts-loader": "^9.5.1",
+    "webpack": "^5.92.1",
+    "webpack-cli": "^5.1.4",
     "eslint": "^8.57.0",
     "typescript": "^5.4.5"
   },
