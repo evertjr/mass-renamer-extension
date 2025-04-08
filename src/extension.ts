@@ -31,6 +31,21 @@ async function massRename(uris: vscode.Uri[]) {
     }
   }
 
+  // Deduplicate file paths to avoid processing duplicates.
+  // On Windows, paths are case-insensitive so we convert to lower case.
+  const seen = new Set<string>();
+  files = files.filter((f) => {
+    const normalized =
+      process.platform === "win32"
+        ? path.normalize(f).toLowerCase()
+        : path.normalize(f);
+    if (seen.has(normalized)) {
+      return false;
+    }
+    seen.add(normalized);
+    return true;
+  });
+
   if (files.length === 0) {
     vscode.window.showWarningMessage("No files selected for renaming.");
     return;

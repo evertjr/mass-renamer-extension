@@ -2,11 +2,11 @@
   "name": "mass-renamer",
   "displayName": "Mass Renamer",
   "description": "Batch rename files and folders with a simple right-click",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "publisher": "evertjunior",
   "icon": "images/icon.png",
   "engines": {
-    "vscode": "^1.92.0"
+    "vscode": ">=1.91.0"
   },
   "repository": {
     "url": "https://github.com/evertjr/mass-renamer-extension.git"
@@ -55,7 +55,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.7",
     "@types/node": "20.x",
-    "@types/vscode": "^1.92.0",
+    "@types/vscode": "^1.91.0",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
     "@typescript-eslint/parser": "^7.11.0",
     "@vscode/test-cli": "^0.0.9",
