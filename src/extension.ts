@@ -294,9 +294,15 @@ async function isWithinWorkspace(fsPath: string): Promise<boolean> {
   if (!vscode.workspace.workspaceFolders) {
     return false;
   }
-  const normalized = path.normalize(fsPath);
+  let normalized = path.normalize(fsPath);
+  if (process.platform === "win32") {
+    normalized = normalized.toLowerCase();
+  }
   for (const folder of vscode.workspace.workspaceFolders) {
-    const root = path.normalize(folder.uri.fsPath);
+    let root = path.normalize(folder.uri.fsPath);
+    if (process.platform === "win32") {
+      root = root.toLowerCase();
+    }
     if (
       normalized === root ||
       (normalized.startsWith(root + path.sep) &&
