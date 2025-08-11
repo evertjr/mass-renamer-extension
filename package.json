@@ -2,7 +2,7 @@
   "name": "mass-renamer",
   "displayName": "Mass Renamer",
   "description": "Batch rename files and folders with a simple right-click",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "publisher": "evertjunior",
   "icon": "images/icon.png",
   "engines": {

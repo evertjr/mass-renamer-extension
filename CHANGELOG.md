@@ -8,6 +8,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Added opt-in setting `massRenamer.deleteEmptyFolders` to automatically delete folders that become empty after mass renaming. Only folders touched by the extension are considered, and deletion occurs only when the folder is empty.
 
+## [0.0.6] - 2025-08-11
+
+- Windows: Hardened workspace path check to be case-insensitive, preventing false negatives that could skip safe deletion of emptied folders when casing differs (e.g., drive letter or mixed-case roots).
+
 ## [0.0.4] - 2025-04-07
 
 - Fixed duplicate file entries on Windows by adding a deduplication step that normalizes and filters file paths before processing.
