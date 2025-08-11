@@ -5,3 +5,5 @@ node_modules
 *.vsix
 *.afdesign
 .DS_Store
+src/**/*.js
+src/**/*.js.map

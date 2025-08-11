@@ -2,7 +2,7 @@
   "name": "mass-renamer",
   "displayName": "Mass Renamer",
   "description": "Batch rename files and folders with a simple right-click",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publisher": "evertjunior",
   "icon": "images/icon.png",
   "engines": {
@@ -31,6 +31,16 @@
         "title": "Mass Rename"
       }
     ],
+    "configuration": {
+      "title": "Mass Renamer",
+      "properties": {
+        "massRenamer.deleteEmptyFolders": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "When enabled, deletes folders that become empty after mass renaming. Only folders that were moved-from by this extension are considered, and only if they are empty."
+        }
+      }
+    },
     "menus": {
       "explorer/context": [
         {

@@ -11,6 +11,7 @@ Mass Rename is an intuitive extension that allows you to rename multiple files a
 - Can move files and create new folders during the operation
 - You can easily use LLMs to help you make complex changes
 - Automatically avoid files and folders in .gitignore
+- Optional: delete empty folders left after moves
 
 ## How to Use
 
@@ -33,6 +34,10 @@ Note: AI is not included with the Mass Renamer extension. You can use any availa
 - Always double-check your changes before saving
 - Use with caution in large projects to avoid unintended consequences
 - Consider using version control for additional safety when performing bulk operations
+
+## Settings
+
+- `massRenamer.deleteEmptyFolders`: When enabled, the extension deletes folders that become empty after a mass rename operation. Only folders that were moved-from by the extension are considered, and they are removed only if empty. Default: `false`.
 
 ## Issues and Contribution
 

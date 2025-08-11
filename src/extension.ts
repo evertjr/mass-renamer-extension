@@ -93,8 +93,9 @@ async function massRename(uris: vscode.Uri[]) {
         );
 
         try {
-          await processRenames(files, newFullPaths);
+          const movedFromDirs = await processRenames(files, newFullPaths);
           files = newFullPaths; // Update files array with new full paths
+          await deleteEmptyFoldersIfEnabled(movedFromDirs);
           vscode.window.showInformationMessage("Mass rename applied!");
         } catch (error) {
           if (error instanceof Error) {
@@ -200,14 +201,18 @@ async function createTempFile(
 
   await vscode.workspace.fs.writeFile(
     vscode.Uri.file(tempFilePath),
-    Buffer.from(relativeFiles.join("\n"))
+    new TextEncoder().encode(relativeFiles.join("\n"))
   );
 
   return tempFilePath;
 }
 
-async function processRenames(oldPaths: string[], newPaths: string[]) {
+async function processRenames(
+  oldPaths: string[],
+  newPaths: string[]
+): Promise<Set<string>> {
   const projectRoot = getProjectRoot(oldPaths[0]);
+  const movedFromDirs = new Set<string>();
 
   for (let i = 0; i < oldPaths.length; i++) {
     const oldFullPath = oldPaths[i];
@@ -223,6 +228,13 @@ async function processRenames(oldPaths: string[], newPaths: string[]) {
           vscode.Uri.file(newFullPath),
           { overwrite: false }
         );
+
+        const oldDir = path.dirname(oldFullPath);
+        const newDir = path.dirname(newFullPath);
+        // Only consider directories where the file was moved to a different folder
+        if (!pathsEqual(oldDir, newDir)) {
+          movedFromDirs.add(oldDir);
+        }
       } catch (error) {
         if (error instanceof Error) {
           vscode.window.showErrorMessage(
@@ -236,6 +248,64 @@ async function processRenames(oldPaths: string[], newPaths: string[]) {
       }
     }
   }
+
+  return movedFromDirs;
+}
+
+function pathsEqual(a: string, b: string): boolean {
+  const na = process.platform === "win32" ? a.toLowerCase() : a;
+  const nb = process.platform === "win32" ? b.toLowerCase() : b;
+  return path.normalize(na) === path.normalize(nb);
+}
+
+async function deleteEmptyFoldersIfEnabled(dirs: Set<string>) {
+  const cfg = vscode.workspace.getConfiguration("massRenamer");
+  const shouldDelete = cfg.get<boolean>("deleteEmptyFolders", false);
+  if (!shouldDelete || dirs.size === 0) {
+    return;
+  }
+
+  for (const dir of dirs) {
+    try {
+      if (!(await isWithinWorkspace(dir))) {
+        continue;
+      }
+      if (await isDirectoryEmpty(dir)) {
+        await vscode.workspace.fs.delete(vscode.Uri.file(dir), {
+          recursive: false,
+        });
+      }
+    } catch (e) {
+      // Best-effort; ignore failures and keep going
+    }
+  }
+}
+
+async function isDirectoryEmpty(dir: string): Promise<boolean> {
+  try {
+    const entries = await fs.promises.readdir(dir);
+    return entries.length === 0;
+  } catch {
+    return false;
+  }
+}
+
+async function isWithinWorkspace(fsPath: string): Promise<boolean> {
+  if (!vscode.workspace.workspaceFolders) {
+    return false;
+  }
+  const normalized = path.normalize(fsPath);
+  for (const folder of vscode.workspace.workspaceFolders) {
+    const root = path.normalize(folder.uri.fsPath);
+    if (
+      normalized === root ||
+      (normalized.startsWith(root + path.sep) &&
+        normalized.length > root.length)
+    ) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function findDuplicates(array: string[]): string[] {

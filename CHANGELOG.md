@@ -4,6 +4,10 @@ All notable changes to the "mass-renamer" extension will be documented in this f
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [0.0.5] - 2025-08-11
+
+- Added opt-in setting `massRenamer.deleteEmptyFolders` to automatically delete folders that become empty after mass renaming. Only folders touched by the extension are considered, and deletion occurs only when the folder is empty.
+
 ## [0.0.4] - 2025-04-07
 
 - Fixed duplicate file entries on Windows by adding a deduplication step that normalizes and filters file paths before processing.
