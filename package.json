@@ -2,7 +2,7 @@
   "name": "mass-renamer",
   "displayName": "Mass Renamer",
   "description": "Batch rename files and folders with a simple right-click",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "publisher": "evertjunior",
   "icon": "images/icon.png",
   "engines": {
@@ -44,7 +44,7 @@
     "menus": {
       "explorer/context": [
         {
-          "when": "explorerResourceIsFolder || explorerResourceIsRoot || explorerResourceMoveableToTrash",
+          "when": "explorerResourceIsFolder || listMultiSelection",
           "command": "extension.massRename",
           "group": "2_modification"
         }
