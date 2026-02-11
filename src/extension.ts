@@ -5,6 +5,11 @@ import * as os from "os";
 import * as path from "path";
 import * as vscode from "vscode";
 
+// While macOS has a case-sensitive filesystem option, it's not supported by 
+// vscode, so we treat it as case-insensitive for simplicity.
+const isCaseInsensitive = 
+  os.platform() === 'win32' || os.platform() === 'darwin';
+
 export function activate(context: vscode.ExtensionContext) {
   const disposable = vscode.commands.registerCommand(
     "extension.massRename",
@@ -36,7 +41,7 @@ async function massRename(uris: vscode.Uri[]) {
   const seen = new Set<string>();
   files = files.filter((f) => {
     const normalized =
-      process.platform === "win32"
+      isCaseInsensitive
         ? path.normalize(f).toLowerCase()
         : path.normalize(f);
     if (seen.has(normalized)) {
@@ -223,10 +228,14 @@ async function processRenames(
 
     if (oldFullPath !== newFullPath) {
       try {
+        // On case insensitive plaforms, "file.txt" and "File.txt" are the same 
+        // file. We must set `overwrite: true` to rename them in place.
+        const shouldOverwrite = pathsEqual(oldFullPath, newFullPath);
+
         await vscode.workspace.fs.rename(
           vscode.Uri.file(oldFullPath),
           vscode.Uri.file(newFullPath),
-          { overwrite: false }
+          { overwrite: shouldOverwrite }
         );
 
         const oldDir = path.dirname(oldFullPath);
@@ -253,8 +262,8 @@ async function processRenames(
 }
 
 function pathsEqual(a: string, b: string): boolean {
-  const na = process.platform === "win32" ? a.toLowerCase() : a;
-  const nb = process.platform === "win32" ? b.toLowerCase() : b;
+  const na = isCaseInsensitive ? a.toLowerCase() : a;
+  const nb = isCaseInsensitive ? b.toLowerCase() : b;
   return path.normalize(na) === path.normalize(nb);
 }
 
@@ -295,12 +304,12 @@ async function isWithinWorkspace(fsPath: string): Promise<boolean> {
     return false;
   }
   let normalized = path.normalize(fsPath);
-  if (process.platform === "win32") {
+  if (isCaseInsensitive) {
     normalized = normalized.toLowerCase();
   }
   for (const folder of vscode.workspace.workspaceFolders) {
     let root = path.normalize(folder.uri.fsPath);
-    if (process.platform === "win32") {
+    if (isCaseInsensitive) {
       root = root.toLowerCase();
     }
     if (
